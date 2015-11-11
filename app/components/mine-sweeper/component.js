@@ -11,16 +11,20 @@ export default Ember.Component.extend({
   height: Ember.computed('numRows', function() {
     return this.get('tileSize')*this.get('numRows');
   }),
-  grid: Ember.computed('numRows', 'numColumns', function() {
-    let grid = [];
-    for(var i = 0; i < this.get('numColumns'); i++){
-      grid.push([]);
-      for(var j = 0; j < this.get('numRows'); j++){
-        grid[i].push(null);
-      }
-    }
-    return grid;
-  })
+  grid: [],
+  displayGrid: Ember.computed('grid', function() {
+    return this.grid;
+  }),
+  // grid: Ember.computed('numRows', 'numColumns', function() {
+  //   let grid = [];
+  //   for(var i = 0; i < this.get('numColumns'); i++){
+  //     grid.push([]);
+  //     for(var j = 0; j < this.get('numRows'); j++){
+  //       grid[i].push(null);
+  //     }
+  //   }
+  //   return grid;
+  // })
   // grid: Ember.computed('numRows', 'numColumns', function() {
   //   return Ember.HTMLBars.compile("<div id='hellllllo'>whaaaa</div>")
   // }),
@@ -29,9 +33,29 @@ export default Ember.Component.extend({
   // place 10 random mines
   //
 
-  // didInsertElement() {
-  //   this.createGame();
-  // },
+  didInsertElement() {
+    this.set('grid', this.generateGrid())
+    this.layMines()
+  },
+
+  generateGrid() {
+    var grid = [];
+    for(var i = 0; i < this.get('numColumns'); i++){
+      grid.push([]);
+      for(var j = 0; j < this.get('numRows'); j++){
+        grid[i].push(null);
+      }
+    }
+    return grid;
+  },
+
+  layMines() {
+    var squares = Array.from({length:this.get('numColumns')*this.get('numRows')})
+    let numMines = 10
+    for (var i = 0; i < numMines; i++) {
+      squares[i] = 'x'
+    };
+  }
 
   // createGame() {
   //   this.grid = this.createGridData()
